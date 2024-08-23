@@ -11,16 +11,20 @@
 
 nav:
   # Navigation bar logo image
-  logo:
+  logo: https://s1.imagehub.cc/images/2024/08/23/d9337fb5cb54fd43aa6d98977e1e0174.jpg
   display_title: true
   # Whether to fix navigation bar
-  fixed: false
+  fixed: true
 
 menu:
   # Home: / || fas fa-home
   # List||fas fa-list:
   #   Music: /music/ || fas fa-music
   #   Movie: /movies/ || fas fa-video
+  首页: / || fas fa-home
+  分类: /categories/ || fas fa-folder-open
+  友情链接: /link/ || fas fa-link
+  关于本人: /about/ || fas fa-heart
 
 # --------------------------------------
 # Code Blocks Settings
@@ -28,34 +32,34 @@ menu:
 
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
-  theme: light
+  theme: pale night
   macStyle: false
   # Code block height limit (unit: px)
   height_limit: false
-  word_wrap: false
+  word_wrap: true
 
   # Toolbar
   copy: true
   language: true
   # true: shrink the code blocks | false: expand the code blocks | none: expand code blocks and hide the button
-  shrink: false
+  shrink: true
   fullpage: false
 
 # Social media links
 # Formal:
 #   icon: link || the description || color
 social:
-  # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
-  # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+  fab fa-github: https://github.com/User-Time || Github || '#24292e'
+  fas fa-envelope: mailto:Time_Player@outlook.com || Email || '#4a7dbe'
 
 # --------------------------------------
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: https://s1.imagehub.cc/images/2024/08/23/d9337fb5cb54fd43aa6d98977e1e0174.jpg
 
 avatar:
-  img: /img/butterfly-icon.png
+  img: http://q.qlogo.cn/headimg_dl?dst_uin=583416178&spec=640&img_type=jpg
   effect: false
 
 # Disable all banner images
@@ -87,11 +91,11 @@ category_img:
 category_per_img:
 
 # The background image of footer
-footer_img: false
+footer_img: true
 
 # Website Background
 # Can set it to color or image url
-background:
+background: https://s1.imagehub.cc/images/2024/08/23/b8404f3adb861cb56dee9136adaec0d7.webp
 
 cover:
   # Disable the cover or not
@@ -143,7 +147,7 @@ post_meta:
 # The position of site info, eg: 300px/300em/300rem/10%
 index_site_info_top:
 # The height of top_img, eg: 300px/300em/300rem
-index_top_img_height:
+index_top_img_height: 50em
 
 # The subtitle on homepage
 subtitle:
@@ -256,9 +260,9 @@ noticeOutdate:
 footer:
   owner:
     enable: true
-    since: 2019
+    since: 2023
   custom_text:
-  # Copyright of theme and framework
+   - Welcome to Time's Domain
   copyright: true
 
 # --------------------------------------
@@ -284,9 +288,9 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/xxxxxx
+      link: https://github.com/User-Time
   card_announcement:
-    enable: true
+    enable: false
     content: This is my Blog
   card_recent_post:
     enable: true
@@ -357,9 +361,9 @@ rightside_bottom:
 
 # Conversion between Traditional and Simplified Chinese
 translate:
-  enable: false
+  enable: true
   # The text of a button
-  default: 繁
+  default: 简
   # the language of website (1 - Traditional Chinese/ 2 - Simplified Chinese）
   defaultEncoding: 2
   # Time delay
@@ -367,7 +371,7 @@ translate:
   # The text of the button when the language is Simplified Chinese
   msgToTraditionalChinese: '繁'
   # The text of the button when the language is Traditional Chinese
-  msgToSimplifiedChinese: '簡'
+  msgToSimplifiedChinese: '简'
 
 # Read Mode
 readmode: true
@@ -1006,6 +1010,7 @@ css_prefix: true
 # Insert the code to head (before '</head>' tag) and the bottom (before '</body>' tag)
 inject:
   head:
+    - <link rel="stylesheet" href="/css/bottom.css">
     # - <link rel="stylesheet" href="/xxx.css">
   bottom:
     # - <script src="xxxx"></script>

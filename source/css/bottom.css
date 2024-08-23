@@ -8,7 +8,7 @@
 #nav .site-page{
     font-size: 1.0em;
 }
-#page-header, #page-header:not(.not-top-img):before, #page-header{
+#page-header, #page-header:not(.not-top-img):before, #page-header,#footer{
     background-color:transparent
 }
 
@@ -21,7 +21,7 @@
 #post-info>#post-meta,#post-info{
     text-align: center;
 }
-html[data-theme="dark"] div#post,
+html[data-theme="dark"] div#page,
 html[data-theme="dark"] div#aside-content > div:not(.sticky_layout),
 html[data-theme="dark"] div#aside-content > .sticky_layout > div,
 html[data-theme="dark"] div.recent-post-item
@@ -29,10 +29,13 @@ html[data-theme="dark"] div.recent-post-item
     background: #121212b0;
 }
 
-html[data-theme="light"] div#post,
+html[data-theme="light"] div#page,
 html[data-theme="light"] div#aside-content > div:not(.sticky_layout),
 html[data-theme="light"] div#aside-content > .sticky_layout > div,
 html[data-theme="light"] .recent-post-item
  {
     background: #ffffffbf;
+}
+.avatar-img img:hover{
+    transform: rotate3d(0, 1, 0, 180deg);
 }
