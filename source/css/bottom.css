@@ -1,0 +1,38 @@
+#nav{
+    height: 7%;
+    padding: 0px 15%;
+}
+#nav .site-name{
+    font-size: 1.5em;
+}
+#nav .site-page{
+    font-size: 1.0em;
+}
+#page-header, #page-header:not(.not-top-img):before, #page-header{
+    background-color:transparent
+}
+
+#nav #blog-info .site-icon{
+    margin-right: 1em;
+    border-radius: 10px;
+    width: 2.5em;
+    height: auto;
+}
+#post-info>#post-meta,#post-info{
+    text-align: center;
+}
+html[data-theme="dark"] div#post,
+html[data-theme="dark"] div#aside-content > div:not(.sticky_layout),
+html[data-theme="dark"] div#aside-content > .sticky_layout > div,
+html[data-theme="dark"] div.recent-post-item
+{
+    background: #121212b0;
+}
+
+html[data-theme="light"] div#post,
+html[data-theme="light"] div#aside-content > div:not(.sticky_layout),
+html[data-theme="light"] div#aside-content > .sticky_layout > div,
+html[data-theme="light"] .recent-post-item
+ {
+    background: #ffffffbf;
+}

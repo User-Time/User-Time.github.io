@@ -1,0 +1,110 @@
+# Hexo 配置文件
+## 文档: https://hexo.io/docs/configuration.html
+## 源码: https://github.com/hexojs/hexo/
+
+# 站点设置
+title: Time's Blog # 站点标题
+subtitle: '' # 站点副标题
+description: '' # 站点描述
+keywords: # 关键词
+author: Time # 作者名
+language: zh-CN # 语言
+timezone: 'Asia/Shanghai' # 时区
+
+# URL设置
+## 设置你的站点URL。例如，如果使用GitHub Page，URL设置为 'https://username.github.io/project'
+url: https://time-blog.top # 站点的URL
+permalink: posts/:abbrlink/ # 永久链接格式（年份/月/日/标题）
+permalink_defaults: # 永久链接的默认值
+pretty_urls: # 美化URL的设置
+  trailing_index: true # 设置为false以移除永久链接中的 'index.html' 后缀
+  trailing_html: true # 设置为false以移除永久链接中的 '.html' 后缀
+abbrlink:
+  alg: crc32  #算法: crc16(default) and crc32
+  rep: hex    #进制: dec(default) and hex
+  
+# 目录设置
+source_dir: source # 源文件目录
+public_dir: public # 生成的静态文件目录
+tag_dir: tags # 标签目录
+archive_dir: archives # 归档目录
+category_dir: categories # 分类目录
+code_dir: downloads/code # 代码下载目录
+i18n_dir: :lang # 多语言目录
+skip_render: # 跳过渲染的文件或目录
+
+# 写作设置
+new_post_name: :title.md # 新文章的文件名格式（标题.md）
+default_layout: post # 默认布局类型
+titlecase: false # 将标题转换为标题格式（即首字母大写）
+external_link: # 外部链接设置
+  enable: true # 启用在新标签页打开外部链接
+  field: site # 应用于整个站点
+  exclude: '' # 排除的链接
+filename_case: 1 # 文件名的大小写设置（0: 保持原样，1: 全部转换为小写，2: 全部转换为大写）
+render_drafts: false # 是否渲染草稿
+post_asset_folder: false # 是否启用文章资源文件夹
+relative_link: false # 是否使用相对链接
+future: true # 是否发布未来的文章
+syntax_highlighter: highlight.js # 使用的语法高亮工具（highlight.js）
+highlight: # highlight.js 的设置
+  line_number: true # 显示行号
+  auto_detect: false # 自动检测语言
+  tab_replace: '' # 替换制表符
+  wrap: true # 是否自动换行
+  hljs: false # 是否使用 highlight.js 的样式
+prismjs: # prismjs 语法高亮设置
+  preprocess: true # 是否在渲染之前处理
+  line_number: true # 显示行号
+  tab_replace: '' # 替换制表符
+
+# 首页设置
+# path: 博客主页的根路径（默认为 ''）
+# per_page: 每页显示的文章数（0为禁用分页）
+# order_by: 文章排序方式（默认按日期降序）
+index_generator: # 首页生成器的设置
+  path: '' # 首页路径
+  per_page: 5 # 每页显示的文章数
+  order_by: -date # 按日期降序排序
+
+# 分类和标签设置
+default_category: uncategorized # 默认分类
+category_map: # 分类映射
+tag_map: # 标签映射
+
+# 元数据元素设置
+## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
+meta_generator: true # 是否启用meta生成器
+
+# 日期和时间格式设置
+## Hexo 使用 Moment.js 解析和显示日期
+## 你可以按照 http://momentjs.com/docs/#/displaying/format/ 中定义的格式自定义日期格式
+date_format: YYYY-MM-DD # 日期格式
+time_format: HH:mm:ss # 时间格式
+## updated_option 支持 'mtime', 'date', 'empty'
+updated_option: 'mtime' # 更新时间选项
+
+# 分页设置
+## 将 per_page 设置为 0 可禁用分页
+per_page: 10 # 每页显示的文章数
+pagination_dir: page # 分页目录
+
+# 包含/排除文件设置
+## include:/exclude: 选项仅适用于 'source/' 文件夹
+include: # 包含的文件或目录
+exclude: # 排除的文件或目录
+ignore: # 忽略的文件或目录
+
+
+# 扩展设置
+## 插件: https://hexo.io/plugins/
+## 主题: https://hexo.io/themes/
+theme: butterfly # 使用的主题
+
+# 部署设置
+## 文档: https://hexo.io/docs/one-command-deployment
+deploy: # 部署设置
+  deploy:
+  type: git # 使用git部署
+  repo: git@github.com:User-Time/User-Time.github.io.git # 仓库地址
+  branch: gh-pages # 分支名
