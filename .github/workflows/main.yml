@@ -23,19 +23,23 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
+      
       - name: Clean previous build
         run: npx hexo clean
 
       - name: Generate static files
         run: npx hexo generate
-
-      - name: Setup SSH
+        
+      - name: Configure Git
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git config --global user.name "User-Time" # 在这里填写你的 GitHub 用户名
+          git config --global user.email "time_player@outlook.com" # 在这里填写你的 GitHub 邮箱
+      # - name: Setup SSH
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Deploy to GitHub Pages
         run: npx hexo deploy
