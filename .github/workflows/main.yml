@@ -35,11 +35,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # 启动 ssh-agent
           eval "$(ssh-agent -s)"
-          
-          # 通过输入密码来解锁 SSH 私钥
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
+          echo ${{ secrets.SSH_PASSPHRASE }} | ssh-add ~/.ssh/id_rsa
+          echo ${{ secrets.SSH_PASSPHRASE }}
           ssh-keyscan github.com >> ~/.ssh/known_hosts
       
       - name: Configure Git
