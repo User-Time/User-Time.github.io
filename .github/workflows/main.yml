@@ -24,10 +24,10 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ variables.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           eval "$(ssh-agent -s)"
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
+          echo "${{ variables.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           
       # - name: Configure Git
