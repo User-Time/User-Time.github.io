@@ -3,7 +3,7 @@ name: Hexo to GitHub Pages
 on:
   push:
     branches:
-      - master  # 当推送到 main 分支时触发工作流
+      - master  # 当推送到 master 分支时触发工作流
   pull_request:
     branches:
       - master
@@ -20,7 +20,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.12.2'
-
+      
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          
+      - name: Configure Git
+        run: |
+          git config --global user.name "User-Time" # 在这里填写你的 GitHub 用户名
+          git config --global user.email "time_player@outlook.com" # 在这里填写你的 GitHub 邮箱
+      
       - name: Install dependencies
         run: npm install
       
@@ -30,20 +44,6 @@ jobs:
       - name: Generate static files
         run: npx hexo generate
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.ACTIONS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval "$(ssh-agent -s)"
-          echo ${{ secrets.SSH_PASSPHRASE }} | ssh-add ~/.ssh/id_rsa
-          echo ${{ secrets.SSH_PASSPHRASE }}
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-      
-      - name: Configure Git
-        run: |
-          git config --global user.name "User-Time" # 在这里填写你的 GitHub 用户名
-          git config --global user.email "time_player@outlook.com" # 在这里填写你的 GitHub 邮箱
-      
+
       - name: Deploy to GitHub Pages
         run: npx hexo deploy
