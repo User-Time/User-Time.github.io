@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MicroPython ESP32 —— 开发环境配置 | Time's Domain</title><meta name="author" content="Time"><meta name="copyright" content="Time"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MicroPython开发环境配置，使用ESP32官方工具烧录固件，配置MicroPython开发环境，注意：实现通电自启后，下次连接设备调试时，需要先点停止按钮再点运行or同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MicroPython ESP32 —— 开发环境配置">
+<meta property="og:url" content="https://time-blog.top/posts/a6c631f8.html">
+<meta property="og:site_name" content="Time&#39;s Domain">
+<meta property="og:description" content="MicroPython开发环境配置，使用ESP32官方工具烧录固件，配置MicroPython开发环境，注意：实现通电自启后，下次连接设备调试时，需要先点停止按钮再点运行or同步">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.imagehub.cc/images/2024/09/09/632ab8560372d588e713ee62d9262431.md.jpg">
+<meta property="article:published_time" content="2024-09-01T12:31:15.000Z">
+<meta property="article:modified_time" content="2024-09-11T01:17:00.365Z">
+<meta property="article:author" content="Time">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="MicroPython">
+<meta property="article:tag" content="ESP32">
+<meta property="article:tag" content="物联网">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.imagehub.cc/images/2024/09/09/632ab8560372d588e713ee62d9262431.md.jpg"><link rel="shortcut icon" href="https://s1.imagehub.cc/images/2024/08/23/d9337fb5cb54fd43aa6d98977e1e0174.jpg"><link rel="canonical" href="https://time-blog.top/posts/a6c631f8.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>(()=>{
+      const saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+      
+      window.btf = {
+        saveToLocal: saveToLocal,
+        getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+          script.src = url
+          script.async = true
+          script.onerror = reject
+          script.onload = script.onreadystatechange = function() {
+            const loadState = this.readyState
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+            script.onload = script.onreadystatechange = null
+            resolve()
+          }
+
+          Object.keys(attr).forEach(key => {
+            script.setAttribute(key, attr[key])
+          })
+
+          document.head.appendChild(script)
+        }),
+
+        getCSS: (url, id = false) => new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+          link.rel = 'stylesheet'
+          link.href = url
+          if (id) link.id = id
+          link.onerror = reject
+          link.onload = link.onreadystatechange = function() {
+            const loadState = this.readyState
+            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+            link.onload = link.onreadystatechange = null
+            resolve()
+          }
+          document.head.appendChild(link)
+        }),
+
+        addGlobalFn: (key, fn, name = false, parent = window) => {
+          const pjaxEnable = true
+          if (!pjaxEnable && key.startsWith('pjax')) return
+
+          const globalFn = parent.globalFn || {}
+          const keyObj = globalFn[key] || {}
+    
+          if (name && keyObj[name]) return
+    
+          name = name || Object.keys(keyObj).length
+          keyObj[name] = fn
+          globalFn[key] = keyObj
+          parent.globalFn = globalFn
+        }
+      }
+    
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+      
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })()</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MicroPython ESP32 —— 开发环境配置',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-11 09:17:00'
+}</script><link rel="stylesheet" href="/css/bottom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load',() => { preloader.endLoading() })
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', () => { preloader.initLoading() }, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', () => { preloader.endLoading() }, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://s1.imagehub.cc/images/2024/08/23/b8404f3adb861cb56dee9136adaec0d7.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="http://q.qlogo.cn/headimg_dl?dst_uin=583416178&amp;spec=640&amp;img_type=jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于本人</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url(https://s1.imagehub.cc/images/2024/09/09/632ab8560372d588e713ee62d9262431.md.jpg);"><nav id="nav"><span id="blog-info"><a href="/" title="Time's Domain"><img class="site-icon" src="https://s1.imagehub.cc/images/2024/08/23/d9337fb5cb54fd43aa6d98977e1e0174.jpg" alt="Logo"/><span class="site-name">Time's Domain</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于本人</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">MicroPython ESP32 —— 开发环境配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-09-01T12:31:15.000Z" title="发表于 2024-09-01 20:31:15">2024-09-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-09-11T01:17:00.365Z" title="更新于 2024-09-11 09:17:00">2024-09-11</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MicroPython ESP32 —— 开发环境配置"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/a6c631f8.html#post-comment"><span id="twikoo-count"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一-使用-ESP32-官方工具烧录固件"><a href="#一-使用-ESP32-官方工具烧录固件" class="headerlink" title="一. 使用 ESP32 官方工具烧录固件"></a>一. 使用 ESP32 官方工具烧录固件</h2><h3 id="1-下载-Flash-工具"><a href="#1-下载-Flash-工具" class="headerlink" title="1. 下载 Flash 工具"></a>1. 下载 Flash 工具</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.espressif.com/zh-hans/support/download/other-tools">https://www.espressif.com/zh-hans/support/download/other-tools</a> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.buNyfj"><img src="https://s1.imagehub.cc/images/2024/09/02/7f1761d062fbba8d4b4b3537a9f800b4.md.png" alt="image"></a></p>
+<h3 id="2-下载-micropython-的-esp32-固件"><a href="#2-下载-micropython-的-esp32-固件" class="headerlink" title="2. 下载 micropython 的 esp32 固件"></a>2. 下载 micropython 的 esp32 固件</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.micropython.org/download/ESP32_GENERIC/">https://www.micropython.org/download/ESP32_GENERIC&#x2F;</a> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.buNiTz"><img src="https://s1.imagehub.cc/images/2024/09/02/b885991d594ed3b60cd5a059449e1a1e.md.png" alt="image"></a></p>
+<h3 id="3-将固件烧入-flash-中"><a href="#3-将固件烧入-flash-中" class="headerlink" title="3. 将固件烧入 flash 中"></a>3. 将固件烧入 flash 中</h3><ul>
+<li>先将下载的 Flash 工具解压缩，双击打开<strong>flash_download_tool_3.9.7.exe</strong> 选择板子型号： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.buNLtg"><img src="https://s1.imagehub.cc/images/2024/09/02/b9856857cf7e20df92d3813cc0e1f0b6.png" alt="image"></a></li>
+<li>点击 ok 之后，需要配置 4 个地方：</li>
+<li>bin 文件路径</li>
+<li>路径后面填写 0x1000</li>
+<li>在左下角选择连接 MicroPython 的 COM 串口 <em>不知道哪个 com 口是开发板可以右键此电脑，点击管理找到设备管理器</em> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9mA5e"><img src="https://s1.imagehub.cc/images/2024/09/08/3753e937f45ebcbf63e45b42906a3eb6.md.png" alt="image"></a></li>
+<li>将 BAUD 调整为 115200 或 921600 <code>BAUD 是指波特率，也就是数据传输速率, 波特率越高，传输速度越快，但也越容易传输过程中产生错误数据</code></li>
+</ul>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.buNQLo"><img src="https://s1.imagehub.cc/images/2024/09/02/f6d1af044a83529eea89f733c50a8e21.png" alt="image"></a></p>
+<ul>
+<li>随后点击 ERASE 格式化开发板 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9ZnUq"><img src="https://s1.imagehub.cc/images/2024/09/08/850b4d64136cf1dda573475aec9d5491.png" alt="image"></a></li>
+<li>显示完成之后再点击 Start 下载 Flash 并刷入开发板 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9ZOe0"><img src="https://s1.imagehub.cc/images/2024/09/08/311d2ba9b806b4a33a6f0eb32b67042d.png" alt="image"></a> 点击 Strat 后显示： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9ZWsz"><img src="https://s1.imagehub.cc/images/2024/09/08/26b1d231adca6cd73db143d8a91985e7.png" alt="image"></a></li>
+<li>状态变蓝之后则就是刷入完成了</li>
+</ul>
+<h2 id="二、安装开发环境"><a href="#二、安装开发环境" class="headerlink" title="二、安装开发环境"></a>二、安装开发环境</h2><h3 id="1-下载-VSCode"><a href="#1-下载-VSCode" class="headerlink" title="1. 下载 VSCode"></a>1. 下载 VSCode</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://code.visualstudio.com/" title="点击下载 VSCode">点击打开官网</a></p>
+<h3 id="2-配置环境"><a href="#2-配置环境" class="headerlink" title="2. 配置环境"></a>2. 配置环境</h3><ul>
+<li>点击拓展 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9ZPSb"><img src="https://s1.imagehub.cc/images/2024/09/08/e4925ed20701f87e8f51036ae5e7f6ff.png" alt="image"></a></li>
+<li>搜索 Chinese <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9ZKpA"><img src="https://s1.imagehub.cc/images/2024/09/08/0a8b81b508c896cadc5a5fe705da7eb1.md.png" alt="image"></a> 点击 <strong>install</strong> 进行安装，安装完成后会在 <strong>VSCode</strong> 的右下角显示下面这个弹窗，点击右下角的按钮重启 <strong>VSCode</strong> 客户端 <em>（就可以显示中文了）</em> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9Zibk"><img src="https://s1.imagehub.cc/images/2024/09/08/6446736fc886fad43048bdb57e445c28.png" alt="image"></a></li>
+<li>重启完后点击拓展，搜索 <code>RT-Thread MicroPython</code> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9Zv7s"><img src="https://s1.imagehub.cc/images/2024/09/08/2338bd638cb16d5153da0b3332746a17.md.png" alt="image"></a> 点击 <strong>安装</strong> 后,安装成功后左下角会显示 5 个按钮，分别对应：<ul>
+<li>创建工程</li>
+<li>连接设备</li>
+<li>同步文件</li>
+<li>运行代码</li>
+<li>终止运行</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9Z7kB"><img src="https://s1.imagehub.cc/images/2024/09/08/6b15fcca9948d0e88538af188fd357e8.png" alt="image"></a></p>
+<h2 id="三、最终测试"><a href="#三、最终测试" class="headerlink" title="三、最终测试"></a>三、最终测试</h2><h3 id="1-首先接入-MicroPython"><a href="#1-首先接入-MicroPython" class="headerlink" title="1. 首先接入 MicroPython"></a>1. 首先接入 MicroPython</h3><p>点击 RT-Thread 的第二个按钮，进行连接开发板 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9m5LJ"><img src="https://s1.imagehub.cc/images/2024/09/08/c6efd19d283ad8233d6896db1f7b9493.png" alt="image"></a> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9mYJs"><img src="https://s1.imagehub.cc/images/2024/09/08/6f1aaa9745ab06c079447e5aed78e20f.md.png" alt="image"></a></p>
+<p>接入成功后 VSCode 下方应该会显示如下截图： <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9z1RG"><img src="https://s1.imagehub.cc/images/2024/09/08/1de47fe6efcc544b15601b0389ac7cf0.md.png" alt="image"></a> <em>（如果只显示 cli.exe -p COM8 repl 没出现 &gt;&gt;&gt; 可以稍等一会）</em></p>
+<h3 id="2-创建文件命名为-main-py"><a href="#2-创建文件命名为-main-py" class="headerlink" title="2. 创建文件命名为 main.py"></a>2. 创建文件命名为 main.py</h3><p>写入以下内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> machine <span class="keyword">import</span> Pin</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">led  = Pin(<span class="number">22</span>, Pin.OUT) <span class="comment"># 具体id看自己的板子</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>: <span class="comment"># 无限循环</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>): <span class="comment"># 闪烁两次</span></span><br><span class="line">        led.value(<span class="keyword">not</span> led.value())</span><br><span class="line">        time.sleep(<span class="number">0.25</span>)</span><br><span class="line">time.sleep(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-测试代码是否正常运行"><a href="#3-测试代码是否正常运行" class="headerlink" title="3. 测试代码是否正常运行"></a>3. 测试代码是否正常运行</h3><p>点击第四个按钮，此时开发板应会每隔 5 秒闪烁 2 次</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9zgLS"><img src="https://s1.imagehub.cc/images/2024/09/08/a17449f209718f0f9b6e03079620d584.png" alt="image"></a></p>
+<p>随后点击运行右边的停止 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9zw5L"><img src="https://s1.imagehub.cc/images/2024/09/08/f93760a338ab844843656466dc7a6bfd.png" alt="image"></a> 然后进行文件同步 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9zl6B"><img src="https://s1.imagehub.cc/images/2024/09/08/18f73337040239e271e1f9889cc4cb4b.png" alt="image"></a> <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9z0Jq"><img src="https://s1.imagehub.cc/images/2024/09/08/7ab28d8d4feb166454552279319477e1.md.png" alt="image"></a></p>
+<h3 id="4-设置为通电自启"><a href="#4-设置为通电自启" class="headerlink" title="4. 设置为通电自启"></a>4. 设置为通电自启</h3><blockquote>
+<p>!!! 注意：实现通电自启后，下次连接设备调试时，需要先点停止按钮再点运行 or 同步</p>
+</blockquote>
+<p>新建一个名为 <strong>boot.py</strong> 的文件，在文件内输入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> main</span><br></pre></td></tr></table></figure>
+
+<p><em>(import 之前新建的文件名)</em></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.imagehub.cc/image/image.b9z3mU"><img src="https://s1.imagehub.cc/images/2024/09/08/7eb3c020f68a7192762fa159e3f7827f.png" alt="image"></a> 然后进行同步，就完成通电自启了</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://time-blog.top">Time</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://time-blog.top/posts/a6c631f8.html">https://time-blog.top/posts/a6c631f8.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://time-blog.top" target="_blank">Time's Domain</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%BC%80%E5%8F%91/">开发</a><a class="post-meta__tags" href="/tags/micropython/">MicroPython</a><a class="post-meta__tags" href="/tags/esp32/">ESP32</a><a class="post-meta__tags" href="/tags/%E7%89%A9%E8%81%94%E7%BD%91/">物联网</a><a class="post-meta__tags" href="/tags/python/">Python</a><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/">教程</a></div><div class="post-share"><div class="social-share" data-image="https://s1.imagehub.cc/images/2024/09/09/632ab8560372d588e713ee62d9262431.md.jpg" data-sites="twitter,wechat,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="prev-post pull-left" href="/posts/9eae8aaf.html" title="显示器接入米家教程"><img class="cover" src="https://s1.imagehub.cc/images/2024/09/11/7fc5e8a19f41735bd91311319fb99163.md.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">显示器接入米家教程</div></div></a><a class="next-post pull-right" href="/posts/4a17b156.html" title="博客复活！"><img class="cover" src="https://s1.imagehub.cc/images/2024/08/23/b8404f3adb861cb56dee9136adaec0d7.th.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">博客复活！</div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a href="/posts/9eae8aaf.html" title="显示器接入米家教程"><img class="cover" src="https://s1.imagehub.cc/images/2024/09/11/7fc5e8a19f41735bd91311319fb99163.md.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-09-11</div><div class="title">显示器接入米家教程</div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info is-center"><div class="avatar-img"><img src="http://q.qlogo.cn/headimg_dl?dst_uin=583416178&amp;spec=640&amp;img_type=jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Time</div><div class="author-info-description">欢迎来到 时域, 会分享一些平常的心得以及一些代码</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/User-Time"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/User-Time" rel="external nofollow noreferrer" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:Time_Player@outlook.com" rel="external nofollow noreferrer" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E4%BD%BF%E7%94%A8-ESP32-%E5%AE%98%E6%96%B9%E5%B7%A5%E5%85%B7%E7%83%A7%E5%BD%95%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">一. 使用 ESP32 官方工具烧录固件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD-Flash-%E5%B7%A5%E5%85%B7"><span class="toc-number">1.1.</span> <span class="toc-text">1. 下载 Flash 工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%8B%E8%BD%BD-micropython-%E7%9A%84-esp32-%E5%9B%BA%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">2. 下载 micropython 的 esp32 固件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%B0%86%E5%9B%BA%E4%BB%B6%E7%83%A7%E5%85%A5-flash-%E4%B8%AD"><span class="toc-number">1.3.</span> <span class="toc-text">3. 将固件烧入 flash 中</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%89%E8%A3%85%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">二、安装开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD-VSCode"><span class="toc-number">2.1.</span> <span class="toc-text">1. 下载 VSCode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="toc-number">2.2.</span> <span class="toc-text">2. 配置环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%80%E7%BB%88%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">三、最终测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%A6%96%E5%85%88%E6%8E%A5%E5%85%A5-MicroPython"><span class="toc-number">3.1.</span> <span class="toc-text">1. 首先接入 MicroPython</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E5%91%BD%E5%90%8D%E4%B8%BA-main-py"><span class="toc-number">3.2.</span> <span class="toc-text">2. 创建文件命名为 main.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8%E8%BF%90%E8%A1%8C"><span class="toc-number">3.3.</span> <span class="toc-text">3. 测试代码是否正常运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AE%BE%E7%BD%AE%E4%B8%BA%E9%80%9A%E7%94%B5%E8%87%AA%E5%90%AF"><span class="toc-number">3.4.</span> <span class="toc-text">4. 设置为通电自启</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/9eae8aaf.html" title="显示器接入米家教程"><img src="https://s1.imagehub.cc/images/2024/09/11/7fc5e8a19f41735bd91311319fb99163.md.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="显示器接入米家教程"/></a><div class="content"><a class="title" href="/posts/9eae8aaf.html" title="显示器接入米家教程">显示器接入米家教程</a><time datetime="2024-09-11T01:04:28.000Z" title="发表于 2024-09-11 09:04:28">2024-09-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/a6c631f8.html" title="MicroPython ESP32 —— 开发环境配置"><img src="https://s1.imagehub.cc/images/2024/09/09/632ab8560372d588e713ee62d9262431.md.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MicroPython ESP32 —— 开发环境配置"/></a><div class="content"><a class="title" href="/posts/a6c631f8.html" title="MicroPython ESP32 —— 开发环境配置">MicroPython ESP32 —— 开发环境配置</a><time datetime="2024-09-01T12:31:15.000Z" title="发表于 2024-09-01 20:31:15">2024-09-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/4a17b156.html" title="博客复活！"><img src="https://s1.imagehub.cc/images/2024/08/23/b8404f3adb861cb56dee9136adaec0d7.th.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客复活！"/></a><div class="content"><a class="title" href="/posts/4a17b156.html" title="博客复活！">博客复活！</a><time datetime="2024-08-22T12:37:00.000Z" title="发表于 2024-08-22 20:37:00">2024-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/177cc1d1.html" title="烟花绽放时，心愿渐近：来自我的2023年回望与蜕变及新的开始"><img src="https://cdn.pixabay.com/photo/2024/04/10/08/16/mountains-8687536_960_720.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="烟花绽放时，心愿渐近：来自我的2023年回望与蜕变及新的开始"/></a><div class="content"><a class="title" href="/posts/177cc1d1.html" title="烟花绽放时，心愿渐近：来自我的2023年回望与蜕变及新的开始">烟花绽放时，心愿渐近：来自我的2023年回望与蜕变及新的开始</a><time datetime="2023-12-07T13:50:15.000Z" title="发表于 2023-12-07 21:50:15">2023-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/c23cef0e.html" title="VRCHAT使用加速器与看油管不冲突的解决方法"><img src="https://s1.imagehub.cc/images/2024/09/09/051084c5e548530908c71a936910a531.th.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="VRCHAT使用加速器与看油管不冲突的解决方法"/></a><div class="content"><a class="title" href="/posts/c23cef0e.html" title="VRCHAT使用加速器与看油管不冲突的解决方法">VRCHAT使用加速器与看油管不冲突的解决方法</a><time datetime="2023-07-15T21:03:31.000Z" title="发表于 2023-07-16 05:03:31">2023-07-16</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://s1.imagehub.cc/images/2024/09/09/632ab8560372d588e713ee62d9262431.md.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Time</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Welcome to Time's Domain</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-api-ten-rosy.vercel.app',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-api-ten-rosy.vercel.app',
+      region: '',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+
+    GLOBAL_CONFIG_SITE.isPost && getCount()
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') setTimeout(init,0)
+    else btf.getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(init)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><img src="https://github.githubassets.com/assets/mona-loading-dark-7701a7b97370.gif" style="position:fixed;width:5em;left:0;bottom:0.25em;transform:rotateY(180deg);"><script></script><script id="canvas_nest" defer="defer" color="61,236,103" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+const triggerPjaxFn = (val) => {
+  if (!val) return
+  Object.values(val).forEach(fn => { fn() })
+}
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjaxSendOnce')
+  btf.removeGlobalFnEvent('themeChange')
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  triggerPjaxFn(window.globalFn.pjaxSend)
+})
+
+document.addEventListener('pjax:complete', () => {
+  btf.removeGlobalFnEvent('pjaxCompleteOnce')
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  triggerPjaxFn(window.globalFn.pjaxComplete)
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
